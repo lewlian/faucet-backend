@@ -88,5 +88,5 @@ app.get("/verify/:username", async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server running in http://localhost:${PORT}/`);
+  console.log(`Server running`);
 });

@@ -9,12 +9,14 @@ import { collection, getDocs, addDoc } from "firebase/firestore";
 config();
 
 const TEZOS_SECRET_KEY = process.env.TEZOS_SECRET_KEY;
+console.log(TEZOS_SECRET_KEY);
 const TEZOS_RPC_URL = process.env.TEZOS_RPC_URL;
 const PORT = process.env.PORT || 2888;
 const BEARER_TOKEN = process.env.BEARER_TOKEN;
 const Tezos = new TezosToolkit(process.env.TEZOS_GRANADA_RPC_URL);
 const app = express();
 const faucetCollectionRef = collection(db, "faucet2");
+
 Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
 
 app.use(cors());
@@ -26,11 +28,11 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
   const twitterAccounts = data.docs.map((doc) => doc.get("twitter"));
 
   if (walletAddresses.includes(address)) {
-    res.status(500).send("Wallet address has already redeemed");
+    res.status(400).send("Wallet address has already redeemed");
     return;
   }
   if (twitterAccounts.includes(twitter)) {
-    res.status(500).send("Twitter account has already been used");
+    res.status(400).send("Twitter account has already been used");
     return;
   }
   console.log(`Transfering ${amount} ꜩ to ${address}...`);

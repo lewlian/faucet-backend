@@ -22,7 +22,7 @@ Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
 app.use(cors());
 app.get("/redeem/:address/:twitter", async (req, res) => {
   const { address, twitter } = req.params;
-  const amount = 0.01;
+  const amount = 1;
   console.log("fetching data from firestore");
   const data = await getDocs(faucetCollectionRef);
   const walletAddresses = data.docs.map((doc) => doc.get("address"));

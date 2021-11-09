@@ -5,7 +5,7 @@ import { config } from "dotenv";
 config();
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
+console.log(process.env.apiKey);
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.apiKey,

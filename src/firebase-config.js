@@ -7,7 +7,7 @@ config();
 // https://firebase.google.com/docs/web/setup#available-libraries
 // Your web app's Firebase configuration
 console.log(process.env.apiKey);
-process.log(process.env.appId);
+console.log(process.env.appId);
 const firebaseConfig = {
   apiKey: process.env.apiKey,
   authDomain: process.env.authDomain,

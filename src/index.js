@@ -23,6 +23,7 @@ app.use(cors());
 app.get("/redeem/:address/:twitter", async (req, res) => {
   const { address, twitter } = req.params;
   const amount = 0.01;
+  console.log("fetching data from firestore");
   const data = await getDocs(faucetCollectionRef);
   const walletAddresses = data.docs.map((doc) => doc.get("address"));
   const twitterAccounts = data.docs.map((doc) => doc.get("twitter"));

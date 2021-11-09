@@ -68,6 +68,9 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
       console.error(error.message);
       res.status(500).send(JSON.stringify(error));
     }
+  } else {
+    res.status(400).send("Faucet has insufficient Balance");
+    return;
   }
 });
 
@@ -87,7 +90,7 @@ app.get("/verify/:username", async (req, res) => {
     const api = `https://api.twitter.com/2/users/${userId}/tweets`;
     const resp = await axios.get(api, config);
     console.log(resp.data);
-    const verified = resp.data.data[0].text.includes("#Tezos");
+    const verified = resp.data.data[0].text.toLowerCase().includes("#tezos");
     console.log(verified);
     res.send(verified);
   } catch (error) {

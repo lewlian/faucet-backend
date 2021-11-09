@@ -9,7 +9,6 @@ import { collection, getDocs, addDoc } from "firebase/firestore";
 config();
 
 const TEZOS_SECRET_KEY = process.env.TEZOS_SECRET_KEY;
-console.log(TEZOS_SECRET_KEY);
 const TEZOS_RPC_URL = process.env.TEZOS_RPC_URL;
 const PORT = process.env.PORT || 2888;
 const BEARER_TOKEN = process.env.BEARER_TOKEN;
@@ -79,6 +78,7 @@ app.get("/verify/:username", async (req, res) => {
     const userId = Idresp.data.data.id;
     const api = `https://api.twitter.com/2/users/${userId}/tweets`;
     const resp = await axios.get(api, config);
+    console.log(resp.data);
     const verified = resp.data.data[0].text.includes("#Tezos");
     console.log(verified);
     res.send(verified);

@@ -9,7 +9,6 @@ import { collection, getDocs, addDoc } from "firebase/firestore";
 config();
 
 const TEZOS_SECRET_KEY = process.env.TEZOS_SECRET_KEY;
-console.log(TEZOS_SECRET_KEY);
 const TEZOS_RPC_URL = process.env.TEZOS_RPC_URL;
 const PORT = process.env.PORT || 2888;
 const BEARER_TOKEN = process.env.BEARER_TOKEN;

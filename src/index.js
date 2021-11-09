@@ -77,11 +77,12 @@ app.get("/verify/:username", async (req, res) => {
     },
   };
   const { username } = req.params;
-  console.log("username:" + username);
+  console.log("username: " + username);
   const getId = "https://api.twitter.com/2/users/by/username/" + username;
   try {
     const Idresp = await axios.get(getId, config);
     const userId = Idresp.data.data.id;
+    console.log("user ID: ", userId);
     const api = `https://api.twitter.com/2/users/${userId}/tweets`;
     const resp = await axios.get(api, config);
     console.log(resp.data);

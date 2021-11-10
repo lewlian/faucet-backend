@@ -20,12 +20,12 @@ const faucetCollectionRef = collection(db, "dev-faucet");
 
 Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
 const apiLimiter =rateLimit({
-  windowMs: 5 * 60 * 1000,
-  max: 1,
+  windowMs: 24 * 60 * 60 * 1000,
+  max: 50,
   statusCode: 200,
   message: {
     status:429,
-    error: 'Please try again in 5 minutes.'
+    error: 'Max redeem attempts reached for the day, try again in 24 hours.'
   },
   headers: true,
 })

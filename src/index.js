@@ -22,12 +22,16 @@ Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
 const apiLimiter =rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 1,
-  message: "Exceeded 1 requests in 15 minutes",
+  statusCode: 200,
+  message: {
+    status:429,
+    error: 'Require 15 minutes interval between each request'
+  },
   headers: true,
 })
-app.use("/redeem/", apiLimiter);
 
 app.use(cors());
+app.use("/redeem/", apiLimiter);
 app.get("/redeem/:address/:twitter", async (req, res) => {
   const { address, twitter } = req.params;
   const amount = 1;
@@ -42,7 +46,7 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
     return;
   }
   if (twitterAccounts.includes(twitter)) {
-    res.status(400).send("Twitter account has already been used");
+    res.status(401).send("Twitter account has already been used");
     return;
   }
   console.log("Checking if there is sufficient balance in faucet...");
@@ -57,7 +61,7 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
     try {
       const op = await Tezos.contract.transfer({ to: address, amount: amount });
       console.log(`Waiting for ${op.hash} to be confirmed...`);
-      res.send(
+      res.status(200).send(
         `Request is successful, please check your wallet in a few minutes for your tez\n (https://granada.tzstats.com/${op.hash})`
       );
       await op.confirmation(1);

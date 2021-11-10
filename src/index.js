@@ -20,12 +20,12 @@ const faucetCollectionRef = collection(db, "dev-faucet");
 
 Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
 const apiLimiter =rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 5 * 60 * 1000,
   max: 1,
   statusCode: 200,
   message: {
     status:429,
-    error: 'Require 15 minutes interval between each request'
+    error: 'Please try again in 5 minutes.'
   },
   headers: true,
 })
@@ -46,7 +46,7 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
     return;
   }
   if (twitterAccounts.includes(twitter)) {
-    res.status(401).send("Twitter account has already been used");
+    res.status(400).send("Twitter account has already been used");
     return;
   }
   console.log("Checking if there is sufficient balance in faucet...");

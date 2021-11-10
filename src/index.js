@@ -15,7 +15,7 @@ const BEARER_TOKEN = process.env.BEARER_TOKEN;
 const FAUCET_ADDRESS = process.env.FAUCET_ADDRESS;
 const Tezos = new TezosToolkit(process.env.TEZOS_GRANADA_RPC_URL);
 const app = express();
-const faucetCollectionRef = collection(db, "granada-faucet");
+const faucetCollectionRef = collection(db, "dev-faucet");
 
 Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
 

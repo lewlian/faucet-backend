@@ -50,7 +50,7 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
       const op = await Tezos.contract.transfer({ to: address, amount: amount });
       console.log(`Waiting for ${op.hash} to be confirmed...`);
       res.send(
-        `Request is successful, please check your wallet in a few minutes for your tez\n Monitor transaction:https://granada.tzstats.com/${op.hash} `
+        `Request is successful, please check your wallet in a few minutes for your tez\n Monitor transaction:\n https://granada.tzstats.com/${op.hash} `
       );
       await op.confirmation(1);
       console.log(`Confirmed - ${op.hash}`);

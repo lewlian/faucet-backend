@@ -6,6 +6,7 @@ import axios from "axios";
 import { db } from "./firebase-config.js";
 import { config } from "dotenv";
 import { collection, getDocs, addDoc } from "firebase/firestore";
+import rateLimit from 'express-rate-limit';
 config();
 
 const TEZOS_SECRET_KEY = process.env.TEZOS_SECRET_KEY;
@@ -18,6 +19,13 @@ const app = express();
 const faucetCollectionRef = collection(db, "dev-faucet");
 
 Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
+const apiLimiter =rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 1,
+  message: "Exceeded 1 requests in 15 minutes",
+  headers: true,
+})
+app.use("/redeem/", apiLimiter);
 
 app.use(cors());
 app.get("/redeem/:address/:twitter", async (req, res) => {

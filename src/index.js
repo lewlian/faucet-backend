@@ -114,7 +114,7 @@ app.get("/verify/:username", async (req, res) => {
     const api = `https://api.twitter.com/2/users/${userId}/tweets`;
     const resp = await axios.get(api, config);
     console.log(resp.data);
-    const verified = resp.data.data[0].text.toLowerCase().includes("#tezos");
+    const verified = resp.data.data[0].text.toLowerCase().includes("#tzapac");
     console.log(verified);
     res.send(verified);
   } catch (error) {

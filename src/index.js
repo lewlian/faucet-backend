@@ -17,18 +17,19 @@ const FAUCET_ADDRESS = process.env.FAUCET_ADDRESS;
 const Tezos = new TezosToolkit(process.env.TEZOS_GRANADA_RPC_URL);
 const app = express();
 const faucetCollectionRef = collection(db, "dev-faucet");
+const secretCode = process.env.FAUCET_SECRET;
 
 Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
-const apiLimiter =rateLimit({
+const apiLimiter = rateLimit({
   windowMs: 24 * 60 * 60 * 1000,
   max: 50,
   statusCode: 200,
   message: {
-    status:429,
-    error: 'Max redeem attempts reached for the day, try again in 24 hours.'
+    status: 429,
+    error: "Max redeem attempts reached for the day, try again in 24 hours.",
   },
   headers: true,
-})
+});
 
 app.use(cors());
 app.use("/redeem/", apiLimiter);
@@ -61,9 +62,11 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
     try {
       const op = await Tezos.contract.transfer({ to: address, amount: amount });
       console.log(`Waiting for ${op.hash} to be confirmed...`);
-      res.status(200).send(
-        `Request is successful, please check your wallet in a few minutes for your tez\n\n https://granada.tzstats.com/${op.hash}`
-      );
+      res
+        .status(200)
+        .send(
+          `Request is successful, please check your wallet in a few minutes for your tez\n\n https://granada.tzstats.com/${op.hash}`
+        );
       await op.confirmation(1);
       console.log(`Confirmed - ${op.hash}`);
       console.log("Adding user to firestore database");
@@ -83,6 +86,15 @@ app.get("/redeem/:address/:twitter", async (req, res) => {
   } else {
     res.status(400).send("Faucet has insufficient Balance");
     return;
+  }
+});
+
+app.get("/authenticate/:secret", async (req, res) => {
+  const { secret } = req.params;
+  if (secret === secretCode) {
+    res.send(true);
+  } else {
+    res.status(400).send("Wrong secret submitted");
   }
 });
 

@@ -14,9 +14,9 @@ const TEZOS_RPC_URL = process.env.TEZOS_RPC_URL;
 const PORT = process.env.PORT || 2888;
 const BEARER_TOKEN = process.env.BEARER_TOKEN;
 const FAUCET_ADDRESS = process.env.FAUCET_ADDRESS;
-const Tezos = new TezosToolkit(process.env.TEZOS_GRANADA_RPC_URL);
+const Tezos = new TezosToolkit(TEZOS_RPC_URL);
 const app = express();
-const faucetCollectionRef = collection(db, "dev-faucet");
+const faucetCollectionRef = collection(db, "mainnet");
 const secretCode = process.env.FAUCET_SECRET;
 
 Tezos.setProvider({ signer: new InMemorySigner(TEZOS_SECRET_KEY) });
@@ -35,7 +35,7 @@ app.use(cors());
 app.use("/redeem/", apiLimiter);
 app.get("/redeem/:address/:twitter", async (req, res) => {
   const { address, twitter } = req.params;
-  const amount = 1;
+  const amount = 0.25;
   console.log("fetching data from firestore");
   const data = await getDocs(faucetCollectionRef);
   const walletAddresses = data.docs.map((doc) => doc.get("address"));
